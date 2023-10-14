@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Code
 {
-    public class HelpScreen : MonoBehaviour
+    public class HelpPanel : MonoBehaviour
     {
         [SerializeField] private Button helpButton, closeButton;
         [SerializeField] private RectTransform screenParent, panel;
@@ -13,6 +13,11 @@ namespace Code
             helpButton.onClick.AddListener(OpenMenu);
             closeButton.onClick.AddListener(CloseMenu);
         }
+        private void OnDisable()
+        {
+            helpButton.onClick.RemoveListener(OpenMenu);
+            closeButton.onClick.RemoveListener(CloseMenu);
+        }
         private void OpenMenu()
         {
             screenParent.DOAnchorPosY(panel.sizeDelta.y, 2f).SetEase(Ease.InOutSine);
@@ -20,11 +25,6 @@ namespace Code
         private void CloseMenu()
         {
             screenParent.DOAnchorPosY(0f, 1.5f).SetEase(Ease.InOutSine);
-        }
-        private void OnDisable()
-        {
-            helpButton.onClick.RemoveListener(OpenMenu);
-            closeButton.onClick.RemoveListener(CloseMenu);
         }
     }
 }
