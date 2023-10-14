@@ -8,16 +8,28 @@ namespace Code
     public class InformationPanel : MonoBehaviour
     {
         [SerializeField] private TMP_Text infoText;
+        [SerializeField] private StackTester stackTester;
+        private SphericalCameraController sphericalCameraController;
         private Transform cam;
         private bool stopRotating;
         private Tween rotationTween;
         private void Start()
         {
             cam = Camera.main.transform;
-            var controller = cam.GetComponentInChildren<SphericalCameraController>();
-            controller.userRotating.AddListener(CancelRotation);
-            controller.radiusThreshold.AddListener(HideInfoPanel);
+            stackTester ??= FindObjectOfType<StackTester>();
+            sphericalCameraController = cam.GetComponentInChildren<SphericalCameraController>();
+            sphericalCameraController.userRotating.AddListener(CancelRotation);
+            sphericalCameraController.radiusThreshold.AddListener(HideInfoPanel);
+            stackTester.StackTestStarted.AddListener(HideInfoPanel);
         }
+
+        private void OnDestroy()
+        {
+            sphericalCameraController.userRotating.RemoveListener(CancelRotation);
+            sphericalCameraController.radiusThreshold.RemoveListener(HideInfoPanel);
+            stackTester.StackTestStarted.RemoveListener(HideInfoPanel);
+        }
+
         private void Update()
         {
             if (stopRotating) return;
