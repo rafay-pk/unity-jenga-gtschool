@@ -1,4 +1,6 @@
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Plugins._3DModelViewer.Code.Camera
 {
@@ -8,18 +10,22 @@ namespace Plugins._3DModelViewer.Code.Camera
         [Header("Asset References")]
         [SerializeField] private CameraConfig config;
 
-        private Transform trans;
+        public UnityEvent userRotating, radiusThreshold;
+        private Transform trans, parent;
         private Vector3 offset;
         private float radius, azimuth, altitude;
         private float previousFingersDistance;
         private bool pauseRotation;
         private bool zoomOrPan = true;
+        private Tween moveTween, zoomTween;
         #endregion
         
         #region Unity Functions
         private void Awake()
         {
             trans = transform;
+            parent = trans.parent;
+            pauseRotation = true;
             ResetCamera();
         }
         private void Update()
@@ -51,6 +57,11 @@ namespace Plugins._3DModelViewer.Code.Camera
         public float GetAltitude() => altitude;
         public float GetRadius() => radius;
         public Vector3 GetOffset() => offset;
+        public void MoveController(Vector3 value)
+        {
+            parent.DOMove(value, 1f).SetEase(Ease.OutExpo);
+            zoomTween = DOTween.To(() => radius, x => radius = x, 5f, 1f).SetEase(Ease.OutExpo);
+        }
         public void SetOffset(Vector3 value) => offset = value; 
         public void ZoomPanToggle() => zoomOrPan = !zoomOrPan;
         public bool GetZoomPanToggle() => zoomOrPan;
@@ -59,10 +70,15 @@ namespace Plugins._3DModelViewer.Code.Camera
         public void ResumeRotation() => pauseRotation = false;
         public void ResetCamera()
         {
-            azimuth = 0f;
-            altitude = 0f;
+            azimuth = -Mathf.PI/2;
+            altitude = 0.5f;
             offset = Vector3.zero;
             radius = config.defaultRadius;
+            UpdateCameraView();
+        }
+        public void ResetOffset()
+        {
+            offset = Vector3.zero;
             UpdateCameraView();
         }
         #endregion
@@ -70,6 +86,10 @@ namespace Plugins._3DModelViewer.Code.Camera
         #region Private Functions
         private void HandleRotationDesktop()
         {
+            if (Input.GetMouseButtonDown(0))
+                pauseRotation = false;
+            if (Input.GetMouseButtonUp(0))
+                pauseRotation = true;
             if (pauseRotation) return;
             var _mouse_delta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
             if (_mouse_delta == Vector2.zero) return;
@@ -79,14 +99,13 @@ namespace Plugins._3DModelViewer.Code.Camera
         {
             var _scroll = Input.mouseScrollDelta.y;
             if (_scroll == 0f) return;
+            zoomTween?.Kill();
             SetZoom(radius - _scroll * config.zoomSpeed);
         }
         private bool HandlePanDesktop()
         {
             var _scroll_btn = Input.GetKey(KeyCode.Mouse2);
-            var _mouse_held = Input.GetKey(KeyCode.Mouse0) && Input.GetKey(KeyCode.Mouse1);
-
-            if (!(_scroll_btn || _mouse_held)) return false;
+            if (!_scroll_btn) return false;
             
             var _mouse_delta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
             if (_mouse_delta == Vector2.zero) return false;
@@ -139,14 +158,19 @@ namespace Plugins._3DModelViewer.Code.Camera
                 radius * Mathf.Cos(altitude) * Mathf.Sin(azimuth)
             );
             trans.localPosition = offset + _spherical_position;
-            trans.LookAt(offset);
+            trans.LookAt(parent.position + offset);
         }
         private void SetRotation(Vector2 delta)
         {
             azimuth = ClampAngle(azimuth - delta.x);
             altitude = Clamp(ClampAngle(altitude - delta.y), config.rotationAltitudeLimits);
+            userRotating.Invoke();
         }
-        private void SetZoom(float value) => radius = Clamp(value, config.zoomLimits);
+        private void SetZoom(float value)
+        {
+            radius = Clamp(value, config.zoomLimits);
+            if (radius > 10f) radiusThreshold.Invoke();
+        }
         private void SetPan(Vector2 delta) => offset = Vector3.ClampMagnitude(offset - (delta.x * trans.right + 
             delta.y * trans.up) * (config.panSpeed * 0.0015f), config.panLimit);
         private static float ClampAngle(float angle) => (angle + Mathf.PI) % (2 * Mathf.PI) - Mathf.PI;
