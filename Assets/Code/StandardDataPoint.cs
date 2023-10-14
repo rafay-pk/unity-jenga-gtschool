@@ -55,6 +55,18 @@ namespace Code
 				_ => Grade.Null
 			};
 		}
+		public static string GradeString(Grade grade)
+		{
+			return grade switch
+			{
+				Grade.Sixth => "6th Grade",
+				Grade.Seventh => "7th Grade",
+				Grade.Eighth => "8th Grade",
+				Grade.Algebra1 => "Algebra I",
+				Grade.Null => throw new ArgumentOutOfRangeException(nameof(grade), grade, null),
+				_ => throw new ArgumentOutOfRangeException(nameof(grade), grade, null)
+			};
+		}
 		public static Mastery ParseMastery(int i)
 		{
 			return i switch

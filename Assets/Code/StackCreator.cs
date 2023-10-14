@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Code
 {
@@ -22,6 +24,8 @@ namespace Code
             positionResetOffset = 2f * new Vector3(blockDimensions.x, 0f, -blockDimensions.x);
             xStep = new Vector3(blockDimensions.x, 0f, 0f);
             zStep = new Vector3(0f, 0f, blockDimensions.x);
+
+            DOTween.SetTweensCapacity(500, 125);
         }
         private void CreateStacks()
         {
@@ -35,9 +39,10 @@ namespace Code
                     .ThenBy(dp => dp.cluster)
                     .ThenBy(dp => dp.standardID).ToList();
 
-                var stackParent = new GameObject(grade.ToString());
+                var stackParent = new GameObject(StandardDataPoint.GradeString(grade));
+                stackParent.transform.position = stackPosition;
                 Instantiate(textPrefab, stackParent.transform).GetComponentInChildren<TMP_Text>().text = stackParent.name;
-
+                
                 var position = stackPosition;
                 var rotated = false;
 
@@ -59,7 +64,10 @@ namespace Code
                     };
                     position += rotated ? zStep : xStep;
                     var rotation = rotated ? Quaternion.Euler(0f, 90f, 0f) : Quaternion.identity;
-                    Instantiate(prefab, position, rotation, stackParent.transform);
+                    var go = Instantiate(prefab, position, rotation, stackParent.transform);
+                    go.GetComponentInChildren<Block>().standardDataPoint = orderedData[i];
+                    go.transform.DOLocalJump(go.transform.localPosition, Random.Range(1f, 15f), 1, 1f)
+                        .SetEase(Ease.OutExpo);
                 }
 
                 stackPosition += Vector3.right * stackOffset;
