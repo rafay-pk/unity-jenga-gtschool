@@ -67,9 +67,17 @@ namespace Code
                 block.DisablePhysics();
             }
         }
+
+        private int counter;
+        private Vector3? groundOriginalLocation;
         private void ShakePlatform()
         {
+            groundOriginalLocation ??= ground.transform.position;
             ground.DOShakePosition(1f, 0.1f);
+            if (++counter > 5)
+            {
+                ground.transform.position = groundOriginalLocation.Value;
+            }
         }
     }
     public readonly struct TransformData

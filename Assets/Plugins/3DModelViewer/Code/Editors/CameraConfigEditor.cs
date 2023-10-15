@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using Plugins._3DModelViewer.Code.Camera;
 using UnityEditor;
 using UnityEngine;
@@ -80,3 +81,4 @@ namespace Plugins._3DModelViewer.Code.Editors
         }
     }
 }
+#endif
