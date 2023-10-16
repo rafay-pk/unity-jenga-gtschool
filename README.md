@@ -17,4 +17,4 @@ To run the build locally, you can run a local server using python. Just run the 
 ``` bash
 python -m http.server 8000
 ```
-Then open [localhost:8000](localhost:8000) in your browser.
+Then open [localhost:8000](http://127.0.0.1:8000) in your browser.
