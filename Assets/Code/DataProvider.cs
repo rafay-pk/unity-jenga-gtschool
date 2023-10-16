@@ -1,26 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Code.Tools;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 
 namespace Code
 {
-    public class DataProvider : MonoBehaviour
+    public class DataProvider : Singleton<DataProvider>
     {
-        [SerializeField] private string API_URL = "https://ga1vqcu3o1.execute-api.us-east-1.amazonaws.com/Assessment/stack";
-        [SerializeField] private List<StandardDataPoint> data;
+        [Header("Data")]
+        [SerializeField] private string apiUrl = "https://ga1vqcu3o1.execute-api.us-east-1.amazonaws.com/Assessment/stack";
+        private readonly List<StandardDataPoint> data = new();
         public IEnumerable<StandardDataPoint> Data => data;
+        [Header("Events")]
         public UnityEvent OnDataFetchComplete;
         private void Awake()
         {
-            data = new List<StandardDataPoint>();
             StartCoroutine(FetchData());
         }
         private IEnumerator FetchData()
         {
-            using var www = UnityWebRequest.Get(API_URL);
+            using var www = UnityWebRequest.Get(apiUrl);
             yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.ConnectionError)

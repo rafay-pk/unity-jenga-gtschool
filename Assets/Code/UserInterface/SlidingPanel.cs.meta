@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8ce8f9f11adb409fa8fac8b1f36e03f5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - slideInSFX: {fileID: 8300000, guid: 7019c73161620b9459d41bc7733e0e9e, type: 3}
+  - slideOutSFX: {fileID: 8300000, guid: 15f89c4ac97d3e94f89529a8e2fd29ae, type: 3}
+  - audioSource: {instanceID: 0}
+  - openButton: {instanceID: 0}
+  - closeButton: {instanceID: 0}
+  - parent: {instanceID: 0}
+  - panel: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

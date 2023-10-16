@@ -267,52 +267,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 150370513}
-  - component: {fileID: 150370512}
-  - component: {fileID: 150370511}
   m_Layer: 0
-  m_Name: StackManager
+  m_Name: StackSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &150370511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 150370510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e281b6c6b64716f48ab4cfc616199cf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dataProvider: {fileID: 0}
-  blockPrefab: {fileID: 4124281046971513869, guid: 58337d0a60b4fa8439666b27a3900888, type: 3}
-  glassPrefab: {fileID: 4144748593704785050, guid: 976c0d021e142d245b9e8aeb61070587, type: 3}
-  woodPrefab: {fileID: 2696383354884514188, guid: 60993f80c39650b40bcdb108b4354e42, type: 3}
-  stonePrefab: {fileID: 2696383354884514188, guid: 72550c85c36870b4cafd5f436c777f26, type: 3}
-  textPrefab: {fileID: 2869265884588770387, guid: f4ff8d3f1defbdd428d46493cabc8bc7, type: 3}
-  spawnPoint: {fileID: 150370513}
-  stackOffset: 10
---- !u!114 &150370512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 150370510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ace3cce6df0f2846b41d5954119cb50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  API_URL: https://ga1vqcu3o1.execute-api.us-east-1.amazonaws.com/Assessment/stack
-  data: []
-  OnDataFetchComplete:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!4 &150370513
 Transform:
   m_ObjectHideFlags: 0
@@ -322,7 +283,7 @@ Transform:
   m_GameObject: {fileID: 150370510}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.41249993, y: 0.5, z: 0}
-  m_LocalScale: {x: 0.024999999, y: 1, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 834164929}
@@ -1678,7 +1639,7 @@ RectTransform:
   m_Children:
   - {fileID: 275785652}
   m_Father: {fileID: 1565577832}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1738,6 +1699,12 @@ MonoBehaviour:
   notificationPanel: {fileID: 813375587}
   notificationText: {fileID: 275785653}
   panelImage: {fileID: 813375588}
+  waitTime: 1
+  resetPosition: {x: 500, y: 50}
+  motion1Position: -50
+  motion1Duration: 0.5
+  motion2Position: 200
+  motion2Duration: 1
 --- !u!224 &828469857 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4394018801314209587, guid: afe94525ef5d2c043a8dd2bd92645ae8, type: 3}
@@ -1854,6 +1821,7 @@ GameObject:
   - component: {fileID: 885186990}
   - component: {fileID: 885186992}
   - component: {fileID: 885186993}
+  - component: {fileID: 885186994}
   m_Layer: 5
   m_Name: TestMyStackButton
   m_TagString: Untagged
@@ -1875,7 +1843,7 @@ RectTransform:
   m_Children:
   - {fileID: 1895318648}
   m_Father: {fileID: 1565577832}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1976,17 +1944,113 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11e54e934c7753b49bc1483fc04ce1e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swooshSFX: {fileID: 8300000, guid: 3d72936751166d243b1e4df6ff076586, type: 3}
+  audioSource: {fileID: 885186994}
   testMyStackPanel: {fileID: 2015974991}
   testMyStackButtonRect: {fileID: 885186989}
   testMyStackButton: {fileID: 885186992}
   resetButton: {fileID: 1451918584}
   earthQuakeButton: {fileID: 1165117511}
-  stackCreator: {fileID: 0}
   ground: {fileID: 834164929}
-  notificationPanel: {fileID: 0}
   StackTestStarted:
     m_PersistentCalls:
       m_Calls: []
+--- !u!82 &885186994
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885186988}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &901451390
 GameObject:
   m_ObjectHideFlags: 0
@@ -2479,7 +2543,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoText: {fileID: 58581008}
-  stackTester: {fileID: 0}
+  cam: {fileID: 963194228}
+  showRotation: {x: -0.70710677, y: 0, z: 0, w: 0.70710677}
+  showDuration: 1
+  hideDuration: 0.5
 --- !u!114 &943258414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2723,11 +2790,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c185a91c8c0227c4fb435e663e96ca13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 11400000, guid: 38a711834886a744881b51dccfc93787, type: 2}
-  userRotating:
+  config: {fileID: 11400000, guid: c5a79b2277ef67d40bde6a10eb540297, type: 2}
+  UserRotating:
     m_PersistentCalls:
       m_Calls: []
-  radiusThreshold:
+  RadiusThreshold:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &963194233
@@ -3868,8 +3935,8 @@ GameObject:
   - component: {fileID: 1315804792}
   - component: {fileID: 1315804791}
   - component: {fileID: 1315804793}
-  - component: {fileID: 1315804794}
   - component: {fileID: 1315804795}
+  - component: {fileID: 1315804796}
   m_Layer: 5
   m_Name: AttributionPanel
   m_TagString: Untagged
@@ -3892,7 +3959,7 @@ RectTransform:
   - {fileID: 1272009230}
   - {fileID: 1710031939}
   m_Father: {fileID: 1565577832}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -3981,25 +4048,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1315804794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1315804789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cdbab76416364e43ad3f784ee073738, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attributionButton: {fileID: 1315804793}
-  closeButton: {fileID: 666344809}
-  attributionPanel: {fileID: 1710031939}
-  panelParent: {fileID: 1315804790}
-  audioSource: {fileID: 1315804795}
-  slideInSFX: {fileID: 8300000, guid: 7019c73161620b9459d41bc7733e0e9e, type: 3}
-  slideOutSFX: {fileID: 8300000, guid: 15f89c4ac97d3e94f89529a8e2fd29ae, type: 3}
 --- !u!82 &1315804795
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4096,6 +4144,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1315804796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315804789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cdbab76416364e43ad3f784ee073738, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slideInSFX: {fileID: 8300000, guid: 7019c73161620b9459d41bc7733e0e9e, type: 3}
+  slideOutSFX: {fileID: 8300000, guid: 15f89c4ac97d3e94f89529a8e2fd29ae, type: 3}
+  audioSource: {fileID: 1315804795}
+  openButton: {fileID: 1315804793}
+  closeButton: {fileID: 666344809}
+  parent: {fileID: 1315804790}
+  panel: {fileID: 1710031939}
+  slideInDuration: 2
+  slideOutDuration: 1.5
 --- !u!1 &1335210820
 GameObject:
   m_ObjectHideFlags: 0
@@ -4502,6 +4571,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1542246884}
+  - component: {fileID: 1542246885}
+  - component: {fileID: 1542246887}
+  - component: {fileID: 1542246886}
   m_Layer: 0
   m_Name: CameraCenter
   m_TagString: Untagged
@@ -4525,6 +4597,63 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1542246885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542246883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd8ec1b8287d6584c9eac4b965d42153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  singletons:
+  - {fileID: 963194232}
+  - {fileID: 1542246887}
+  - {fileID: 1542246886}
+  - {fileID: 885186993}
+  - {fileID: 943258412}
+  - {fileID: 813375590}
+--- !u!114 &1542246886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542246883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e281b6c6b64716f48ab4cfc616199cf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textPrefab: {fileID: 2869265884588770387, guid: f4ff8d3f1defbdd428d46493cabc8bc7, type: 3}
+  glassPrefab: {fileID: 4144748593704785050, guid: 976c0d021e142d245b9e8aeb61070587, type: 3}
+  woodPrefab: {fileID: 2696383354884514188, guid: 60993f80c39650b40bcdb108b4354e42, type: 3}
+  stonePrefab: {fileID: 2696383354884514188, guid: 72550c85c36870b4cafd5f436c777f26, type: 3}
+  spawnPoint: {fileID: 150370513}
+  stackOffset: 10
+  positionResetOffset: {x: 2, y: 0, z: -2}
+  verticalOffset: {x: 0, y: 0.2, z: 0}
+  xStep: {x: 1, y: 0, z: 0}
+  zStep: {x: 0, y: 0, z: 1}
+--- !u!114 &1542246887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542246883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ace3cce6df0f2846b41d5954119cb50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  apiUrl: https://ga1vqcu3o1.execute-api.us-east-1.amazonaws.com/Assessment/stack
+  OnDataFetchComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1553310714
 GameObject:
   m_ObjectHideFlags: 0
@@ -4752,11 +4881,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1315804790}
   - {fileID: 1901186829}
   - {fileID: 2015974991}
   - {fileID: 885186989}
   - {fileID: 813375587}
-  - {fileID: 1315804790}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5277,10 +5406,10 @@ GameObject:
   - component: {fileID: 1901186831}
   - component: {fileID: 1901186830}
   - component: {fileID: 1901186832}
-  - component: {fileID: 1901186833}
   - component: {fileID: 1901186834}
+  - component: {fileID: 1901186835}
   m_Layer: 5
-  m_Name: HelpButton
+  m_Name: HelpPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5301,7 +5430,7 @@ RectTransform:
   - {fileID: 484425805}
   - {fileID: 1181092628}
   m_Father: {fileID: 1565577832}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5390,25 +5519,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1901186833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1901186828}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba9f9c35bab5a9d4f9013ad254f249bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  helpButton: {fileID: 1901186832}
-  closeButton: {fileID: 2033260286}
-  screenParent: {fileID: 1901186829}
-  panel: {fileID: 484425805}
-  audioSource: {fileID: 1901186834}
-  slideInSFX: {fileID: 8300000, guid: 7019c73161620b9459d41bc7733e0e9e, type: 3}
-  slideOutSFX: {fileID: 8300000, guid: 15f89c4ac97d3e94f89529a8e2fd29ae, type: 3}
 --- !u!82 &1901186834
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5505,6 +5615,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1901186835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901186828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9f9c35bab5a9d4f9013ad254f249bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slideInSFX: {fileID: 8300000, guid: 7019c73161620b9459d41bc7733e0e9e, type: 3}
+  slideOutSFX: {fileID: 8300000, guid: 15f89c4ac97d3e94f89529a8e2fd29ae, type: 3}
+  audioSource: {fileID: 1901186834}
+  openButton: {fileID: 1901186832}
+  closeButton: {fileID: 2033260286}
+  parent: {fileID: 1901186829}
+  panel: {fileID: 484425805}
+  slideInDuration: 2
+  slideOutDuration: 1.5
 --- !u!1 &1926048995
 GameObject:
   m_ObjectHideFlags: 0
@@ -5677,7 +5808,7 @@ RectTransform:
   - {fileID: 1451918587}
   - {fileID: 1165117514}
   m_Father: {fileID: 1565577832}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}

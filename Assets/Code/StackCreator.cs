@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Code.Tools;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -8,36 +9,41 @@ using Random = UnityEngine.Random;
 
 namespace Code
 {
-    public class StackCreator : MonoBehaviour
+    public class StackCreator : Singleton<StackCreator>
     {
-        [SerializeField] private DataProvider dataProvider;
-        [SerializeField] private GameObject blockPrefab, glassPrefab, woodPrefab, stonePrefab, textPrefab;
+        [Header("Asset References")] 
+        [SerializeField] private GameObject textPrefab;
+        [SerializeField] private GameObject glassPrefab, woodPrefab, stonePrefab;
+        [Header("Component References")]
         [SerializeField] private Transform spawnPoint;
+        [Header("Data")]
         [SerializeField] private float stackOffset;
-        private Vector3 verticalOffset, positionResetOffset, xStep, zStep;
-        private Dictionary<Grade, List<Block>> stackDictionary = new();
-        public IReadOnlyList<Block> GetBlocks(Grade grade) => stackDictionary[grade].AsReadOnly();
-        private void Awake()
-        {
-            dataProvider ??= GetComponent<DataProvider>();
-            dataProvider.OnDataFetchComplete.AddListener(CreateStacks);
-            
-            // var blockDimensions = blockPrefab.transform.localScale;
-            // verticalOffset = new Vector3(0f, blockDimensions.y / 3, 0f);
-            // positionResetOffset = 2f * new Vector3(blockDimensions.x, 0f, -blockDimensions.x);
-            // xStep = new Vector3(blockDimensions.x, 0f, 0f);
-            // zStep = new Vector3(0f, 0f, blockDimensions.x);
-            
-            verticalOffset = new Vector3(0f, 0.2f, 0f);
-            positionResetOffset = new Vector3(2f, 0f, -2f);
-            xStep = new Vector3(1f, 0f, 0f);
-            zStep = new Vector3(0f, 0f, 1f);
+        [SerializeField] private Vector3 positionResetOffset = new (2f, 0f, -2f);
+        [SerializeField] private Vector3 verticalOffset = new (0f, 0.2f, 0f);
+        [SerializeField] private Vector3 xStep = new (1f, 0f, 0f);
+        [SerializeField] private Vector3 zStep = new (0f, 0f, 1f);
+        private readonly Dictionary<Grade, List<Block>> stackDictionary = new();
+        public IEnumerable<Block> GetBlocks(Grade grade) => stackDictionary[grade];
 
+        #region Unity Functions
+        private void Start()
+        {
             DOTween.SetTweensCapacity(500, 125);
         }
+        private void OnEnable()
+        {
+            DataProvider.Instance.OnDataFetchComplete.AddListener(CreateStacks);
+        }
+        private void OnDisable()
+        {
+            DataProvider.Instance.OnDataFetchComplete.RemoveListener(CreateStacks);
+        }
+        #endregion
+        
+        #region Private Functions
         private void CreateStacks()
         {
-            var stacks = dataProvider.Data.GroupBy(dp => dp.grade);
+            var stacks = DataProvider.Instance.Data.GroupBy(dp => dp.grade);
             var stackPosition = spawnPoint.position;
             foreach (var stack in stacks)
             {
@@ -84,5 +90,6 @@ namespace Code
                 stackPosition += Vector3.right * stackOffset;
             }
         }
+        #endregion
     }
 }
