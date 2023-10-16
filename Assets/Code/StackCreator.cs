@@ -26,7 +26,7 @@ namespace Code
         public IEnumerable<Block> GetBlocks(Grade grade) => stackDictionary[grade];
 
         #region Unity Functions
-        private void Start()
+        private void Awake()
         {
             DOTween.SetTweensCapacity(500, 125);
         }

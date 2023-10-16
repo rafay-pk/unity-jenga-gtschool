@@ -1,4 +1,5 @@
 using DG.Tweening;
+
 namespace Code.UserInterface
 {
     public class AttributionPanel : SlidingPanel
